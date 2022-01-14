@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+	"title": "Joana's Blog",
+	"author": "Joana",
+	"url": "https://jocorrei.github.io/My-portifolio/",
+	"likes": 1000
+}
