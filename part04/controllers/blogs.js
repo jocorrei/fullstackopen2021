@@ -1,57 +1,57 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 
-blogRouter.get('/', (request, response) => {
-	Blog.find({}).then(blogs => {
-		response.json(blogs)
-	})
+blogRouter.get('/', async (request, response) => {
+	const blogs = await Blog.find({})
+	response.json(blogs)
 })
 
-blogRouter.get('/:id', (request, response) => {
-//	console.log(request.params);
-	Blog
-	.findById(request.params.id)
-	.then(resp => {
-		response.json(resp)
-	})
+blogRouter.get('/:id', async (request, response) => {
+	//	console.log(request.params);
+	const blog = await Blog.findById(request.params.id)
+	if (blog) {
+		response.json(blog)		
+	} else {
+		response.status(404).end()
+	}	
 })
 
-blogRouter.delete('/:id', (request, response) => {
-	Blog
-	.findByIdAndDelete(request.params.id)
-	.then(resp => {
-		if (resp) {
-			response.json(resp)
-		}
-		else {
-			response.status(404).send({error: 'inexisting ID'})
-		}
-	})
-})
-
-blogRouter.post('/', (request, response) => {
-	const blog = new Blog(request.body)
-
-	blog.save().then(result => {
-		response.status(201).json(result)
-	})
-})
-
-blogRouter.put('/:id', (request, response, next) => {
+blogRouter.delete('/:id', async (request, response) => {
 	
-	console.log(request.body);
+	const blog = await Blog.findByIdAndDelete(request.params.id)
+	if (blog) {
+		response.json(blog)
+	}
+	else {
+		response.status(404).send({ error: 'inexisting ID'})
+	}
+})
 
-	Blog.findByIdAndUpdate(request.params.id, request.body, {
+blogRouter.post('/', async (request, response) => {
+
+	if (!request.body.title && !request.body.url) {
+		return response.status(400).send({ error : 'missing content' })
+	}
+	
+	const blog = await new Blog(request.body)
+	if (!blog.likes) {
+		blog.likes = 0;
+	}
+	const savedBlog = await blog.save()
+	response.status(201).json(blog)
+})
+
+blogRouter.put('/:id', async (request, response, next) => {
+	
+	const blog = await Blog.findByIdAndUpdate(request.params.id, request.body, {
 		new:true, runValidators:true
 	})
-	.then(resp => {
-		if (resp) {
-			response.json(resp)
-		}
-		else {
-			response.status(404).send({error: 'Couldnt find entry'})
-		}
-	})
+	if (blog) {
+		response.json(blog)
+	}
+	else {
+		response.status(404).send({ error: 'Couldnt find entry'})
+	}
 })
 
 module.exports = blogRouter

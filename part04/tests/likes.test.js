@@ -1,4 +1,5 @@
 const listHelper = require('../utils/list_helper')
+const logger = require('../utils/logger')
 
 const blogs = [
     {
@@ -71,7 +72,7 @@ const blogs = [
 
 	test('array with only one blog', () => {
 		const result = listHelper.totalLikes(blog)
-		console.log(result);
+		logger.info(result);
 		expect(result).toBe(7)
 	})
 

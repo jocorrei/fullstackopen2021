@@ -1,3 +1,5 @@
+const logger = require('./logger')
+
 const dummy = (blogs) => {
 	return 1;
   }
@@ -14,7 +16,7 @@ const favoriteBlog = (blogs) => {
 		const {
 		_id, __v, url, ...obj
 	} = blogs.sort((a, b) => b.likes - a.likes)[0]
-	console.log(obj);
+	logger.info(obj);
 	return obj
 }
 
@@ -56,7 +58,7 @@ const mostLikes = (blogs, key) => {
 		}
 	})
 	//console.log(arr2.sort((a, b) => b.blogs - a.blogs)[0])
-	console.log(arr2);
+	logger.info(arr2)
 	
 	return arr2.sort((a, b) => b.blogs - a.blogs)[0];
 	

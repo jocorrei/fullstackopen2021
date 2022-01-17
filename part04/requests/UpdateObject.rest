@@ -1,9 +1,6 @@
-PUT http://localhost:3001/api/blogs/61e1e76d915dd6fc7203088b
+PUT http://localhost:3001/api/blogs/5a422a851b54a676234d17f7
 Content-Type: application/json
 
 {
-	"title": "João Pedro blog",
-	"author": "Joao Pedro",
-	"url": "https://jocorrei.github.io/My-portifolio/",
-	"likes": 1000
+	"likes": 300
 }
