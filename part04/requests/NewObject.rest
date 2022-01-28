@@ -1,9 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImV4a2l6b3Jvb3QiLCJpZCI6IjYxZjBhMGU1M2ZiOGRlZTFiZmFhMTVhNSIsImlhdCI6MTY0MzE2MDUxMSwiZXhwIjoxNjQzMTY0MTExfQ.8Mt2wixgDNKcj-lccCjwyIVPub4r3fy5NEF1eg9FhRQ
 
 {
-	"title": "Amaral's Blog",
-	"author": "Amaral",
+	"title": "Exkizo website",
+	"author": "Exkizo",
 	"url": "https://jocorrei.github.io/My-portifolio/",
-	"likes": 300
+	"likes": 20003,
+	"userId": "61ef150312d77a09cf35befe"
 }
