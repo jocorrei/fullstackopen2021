@@ -23,7 +23,13 @@ This repository contains my submissions to the Full Stack Open 2021 course from 
 * [countries](./part02/countries)
 * [phonebook](./part02/phonebook)
 
-## Part03 - Programing server
+## Part03 - Programming a server with NodeJS and Express
 <div><a href='https://fullstackopen.com/en/part3'>Link to material</a></div>
 
-* [courseinfo](https://github.com/jocorrei/fullstackopen2021_part03)
+* [code](https://github.com/jocorrei/fullstackopen2021_part03)
+
+## Part04 - Testing Express servers, user administration
+<div><a href='https://fullstackopen.com/en/part4'>Link to material</a></div>
+
+* [code](./part04)
+
