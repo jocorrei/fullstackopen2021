@@ -11,21 +11,20 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
-  const [newBlog, setNewBlog] = useState({ title: '', url: '', author: ''})
+  const [newBlog, setNewBlog] = useState({ title: '', url: '', author: '' })
   const [display, setDisplay] = useState(null)
   const [loginVisible, setLoginVisible] = useState(true)
   const [createVisible, setCreateVisible] = useState(true)
-  
   const notificationStyle = {
     display: display,
     color: 'red',
-		background: 'lightgrey',
-		fontSize: 20,
-		borderStyle: 'solid',
-		borderRadius: 5,
-		padding: 10,
-		marginBotton: 10,
-		marginTop: 10
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBotton: 10,
+    marginTop: 10
   }
 
   const handleLogin = async (event) => {
@@ -44,6 +43,7 @@ const App = () => {
       setUsername('')
       setPassword('')
       const blogs = await blogService.getAll()
+      blogs.sort((a,b) => b.likes - a.likes)
       setBlogs(blogs)
 
     } catch (exception) {
@@ -59,26 +59,30 @@ const App = () => {
   const handleCreate = async (event) => {
     event.preventDefault()
     blogService.create(newBlog)
-    .then(response => { 
-      setDisplay('block')
-      setErrorMessage(`${response.title} by ${response.author} added to the list`)
-      setTimeout(() => {
-        setErrorMessage(null)
-        setDisplay('none')
-      }, 5000)
-    })
-    .catch(error => { 
-      setDisplay('block')
-      setErrorMessage('Invalid input. please fill all form')})
+      .then(response => {
+        setDisplay('block')
+        setErrorMessage(`${response.title} by ${response.author} added to the list`)
+        setNewBlog({ title: '', url: '', author: '' })
+        blogService.getAll()
+          .then(response => {
+            //console.log(response);
+            response.sort((a,b) => b.likes - a.likes)
+            setBlogs(response)
+          })
+        setTimeout(() => {
+          setErrorMessage(null)
+          setDisplay('none')
+        }, 5000)
+      })
+      .catch(() => {
+        setDisplay('block')
+        setErrorMessage('Invalid input. please fill all form')})
     setTimeout(() => {
       setErrorMessage(null)
       setDisplay('none')
     }, 5000)
-    setNewBlog({title: '', url: '', author: ''})
-    const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs)
   }
-  const handleLogout = async (event) => {
+  const handleLogout = async () => {
     window.localStorage.clear()
     setUser(null)
     setBlogs([])
@@ -87,14 +91,15 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       const updatedBlogs = await blogService.getAll()
+      updatedBlogs.sort((a,b) => b.likes - a.likes)
       setBlogs(updatedBlogs)
     }
     const loggedUserJSON = window.localStorage
-    .getItem('loggedNoteappUser')
+      .getItem('loggedNoteappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      console.log(user);
+      //console.log(user);
       blogService.setToken(user.token)
       fetchData()
     }
@@ -102,15 +107,15 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blog's Application</h1>
+      <h1>Blogs Application</h1>
       {errorMessage !== null &&
           <div style={notificationStyle}>
             <h1>{ errorMessage }</h1>
           </div>
-          }
-      {user == null && <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername} loginVisible={loginVisible} setLoginVisible={setLoginVisible}/>}
+      }
+      {user === null && <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername} loginVisible={loginVisible} setLoginVisible={setLoginVisible}/>}
       {user !== null && <BlogForm user={user} handleLogout={handleLogout} handleCreate={handleCreate} newBlog={newBlog} setNewBlog={setNewBlog} createVisible={createVisible} setCreateVisible={setCreateVisible}/>}
-      {user !== null && <BlogList blogs={blogs} setBlogs={setBlogs}/>}
+      {user !== null && <BlogList blogs={blogs} setBlogs={setBlogs} user={user}/>}
     </div>
   )
 }

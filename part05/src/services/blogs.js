@@ -3,7 +3,7 @@ const baseUrl = '/api/blogs'
 let config = null
 
 const setToken = (userToken) => {
-  config = { headers: { Authorization : `bearer ${userToken}`}}
+  config = { headers: { Authorization : `bearer ${userToken}` } }
 }
 
 const getAll = () => {
@@ -21,8 +21,14 @@ const updateLike = (newObject, id) => {
   return request.then(response => response.data)
 }
 
-export default { 
+const deleteOne = id => {
+  const request = axios.delete(`${baseUrl}/${id}`, config)
+  return request.then(response => response.data)
+}
+
+export default {
   getAll,
   setToken,
   create,
-  updateLike }
+  updateLike,
+  deleteOne }
